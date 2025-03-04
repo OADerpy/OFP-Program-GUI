@@ -205,6 +205,7 @@ def reset_button_pressed():
             UI.delete_item(row)
 
 def export_button_pressed():
+    print("Calculating...")
     # Take the variables from the input boxes and add them to the data dict
     # Export the file as PDF
     global data
@@ -234,10 +235,20 @@ def export_button_pressed():
             data["page" + page_index][key + wpt_index] = value
 
     # Add the misc information to the data dict
-    # Notes
-    # Trans altitude
-    # Frequencies ARR, DEP, ALT
-    # Enroute frequencies
+    for page in data:
+        data[page]["Notes and Clearance"] = UI.get_value("Notes and Clearance")
+        data[page]["transition_altitude"] = UI.get_value("transition_altitude")
+
+        for v in ["dep", "arr", "alt"]:
+            data[page][v + "_airport"] = UI.get_value(v + "_airport")
+            data[page][v + "_twr_frequency"] = UI.get_value(v + "_twr_frequency")
+            data[page][v + "_atis_frequency"] = UI.get_value(v + "_atis_frequency")
+            data[page][v + "_ext_frequency"] = UI.get_value(v + "_ext_frequency")
+        
+        for i in ["1","2","3"]:
+            data[page]["enr_frequency_name_" + i] = UI.get_value("station_" + i)
+            data[page]["enr_frequency_" + i] = UI.get_value("frequency_" + i)
+
 
     print("Exporting...")
     # Save file as PDF
@@ -249,7 +260,7 @@ def export_button_pressed():
     with open("output/OFP.pdf", "wb+") as output:
         output.write(pages.read())
     
-    print("Export Sucessfull")
+    print("Export Successful!")
 
 
 UI.create_viewport(title="OFP Program", width=1080, height=600, resizable=False)
@@ -286,8 +297,12 @@ with UI.window(no_background=True, tag="Primary Window"):
 
                 with UI.group():
                     with UI.group(horizontal=True):
-                        UI.add_input_text(width=300, height=130, multiline=True, hint="Notes and Clearance", tag="Notes and Clearance")
-                        UI.add_input_text(width=160, height=130, uppercase=True, hint="Transition Altitude", tag="transition_altitude")
+                        with UI.group():
+                            UI.add_text(default_value="Notes and Clearance")
+                            UI.add_input_text(width=300, height=130, multiline=True, tag="Notes and Clearance")
+                        with UI.group():
+                            UI.add_text(default_value="Transition Altitude")
+                            UI.add_input_text(width=160, height=130, uppercase=True, tag="transition_altitude", default_value="7000 FT")
 
                     UI.add_spacer(height=5)
 
@@ -295,36 +310,36 @@ with UI.window(no_background=True, tag="Primary Window"):
                         with UI.group():
                             UI.add_text(default_value="Frequencies")
                             with UI.group(horizontal=True): # Dep Airport
-                                UI.add_input_text(width=40, hint="DEP")
-                                UI.add_input_text(width=60, hint="TWR")
-                                UI.add_input_text(width=60, hint="ATIS")
-                                UI.add_input_text(width=60, hint="GROUND")
+                                UI.add_input_text(width=40, hint="DEP", tag="dep_airport")
+                                UI.add_input_text(width=60, hint="TWR", tag="dep_twr_frequency")
+                                UI.add_input_text(width=60, hint="ATIS", tag="dep_atis_frequency")
+                                UI.add_input_text(width=60, hint="OTHER", tag="dep_ext_frequency")
                             
                             with UI.group(horizontal=True): # Arr Airport
-                                UI.add_input_text(width=40, hint="ARR")
-                                UI.add_input_text(width=60, hint="TWR")
-                                UI.add_input_text(width=60, hint="ATIS")
-                                UI.add_input_text(width=60, hint="GROUND")
+                                UI.add_input_text(width=40, hint="ARR", tag="arr_airport")
+                                UI.add_input_text(width=60, hint="TWR", tag="arr_twr_frequency")
+                                UI.add_input_text(width=60, hint="ATIS", tag="arr_atis_frequency")
+                                UI.add_input_text(width=60, hint="OTHER", tag="arr_ext_frequency")
 
                             with UI.group(horizontal=True): # Alt Airport
-                                UI.add_input_text(width=40, hint="ALT")
-                                UI.add_input_text(width=60, hint="TWR")
-                                UI.add_input_text(width=60, hint="ATIS")
-                                UI.add_input_text(width=60, hint="GROUND")
+                                UI.add_input_text(width=40, hint="ALT", tag="alt_airport")
+                                UI.add_input_text(width=60, hint="TWR", tag="alt_twr_frequency")
+                                UI.add_input_text(width=60, hint="ATIS", tag="alt_atis_frequency")
+                                UI.add_input_text(width=60, hint="OTHER", tag="alt_ext_frequency")
 
                         UI.add_spacer(width=5)
 
                         with UI.group():
                             UI.add_text(default_value="Enroute Frequencies")
                             with UI.group(horizontal=True):
-                                UI.add_input_text(width=110, uppercase=True, hint="Station 1")
-                                UI.add_input_text(width=80, hint="Frequency 1")
+                                UI.add_input_text(width=110, uppercase=True, hint="Station 1", tag="station_1")
+                                UI.add_input_text(width=60, hint="Frequency 1", tag="frequency_1")
                             with UI.group(horizontal=True):
-                                UI.add_input_text(width=110, uppercase=True, hint="Station 2")
-                                UI.add_input_text(width=80, hint="Frequency 2")
+                                UI.add_input_text(width=110, uppercase=True, hint="Station 2", tag="station_2")
+                                UI.add_input_text(width=60, hint="Frequency 2", tag="frequency_2")
                             with UI.group(horizontal=True):
-                                UI.add_input_text(width=110, uppercase=True, hint="Station 3")
-                                UI.add_input_text(width=80, hint="Frequency 3")
+                                UI.add_input_text(width=110, uppercase=True, hint="Station 3", tag="station_3")
+                                UI.add_input_text(width=60, hint="Frequency 3", tag="frequency_3")
             
 UI.hide_item("Input Window")
 
@@ -345,12 +360,12 @@ UI.destroy_context()
 
 
 #------------------TODO-----------------------
-#  Implement misc page info
+#  Restore default values for text fields
 #  Fix UI layout
 #  Ask confirmation before reset
 #  Add status message (display errors, import + export messages)
 #  Make file name into the current date
-#  Add export file directory
+#  Add export file directory selector
 #  Add logic to not override previous exported OFP's
 #  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
 #  Detect when Full stop, Create new page from there on out
