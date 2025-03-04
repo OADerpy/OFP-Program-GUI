@@ -123,7 +123,7 @@ def sort_data(data_table): # takes the raw data from extract_navlog and turns it
             data["page" + str(page_index)] = {}
             data["page" + str(page_index)]["waypoint1"] = first_waypoint
             waypoint_index += 1
-            continue
+            if page_index == 0: continue
         
         insert_data(data_row, waypoint_index, page_index)
 
@@ -134,6 +134,20 @@ def sort_data(data_table): # takes the raw data from extract_navlog and turns it
             continue
 
         waypoint_index += 1
+
+    # loop through all waypoints backwards to calculate minimum remaining fuel
+    waypoint_index -= 1
+    min_remaining_fuel = Decimal(vars['final_res_fuel']) + Decimal(vars['alt_fuel'])
+    for data_row in reversed(data_table):
+        if waypoint_index == 0:
+            waypoint_index = 15
+            page_index -= 1
+            if page_index < 0: continue
+        
+        data["page" + str(page_index)]["fuel_min" + str(waypoint_index)] = str(min_remaining_fuel)
+        min_remaining_fuel += Decimal(data["page" + str(page_index)]["fuel_leg" + str(waypoint_index)])
+
+        waypoint_index -= 1
 
     return data
 
@@ -150,8 +164,8 @@ def extract_button_pressed():
         global data
         data = sort_data(raw_data)
 
-    except:
-        print("An error occurred whilst trying to extract the navlog.")
+    except Exception as error:
+        print("An exception occurred:", error)
 
     else:
         # Lock Input Fields
@@ -197,6 +211,7 @@ def export_button_pressed():
 
     # Loop through all waypoint text boxes and transfer their value to the data dict
     for item in UI.get_item_children("Waypoint Group")[1]:
+        if UI.get_item_type(item) != UI.get_item_type("input_string"): continue
         raw_key = UI.get_item_alias(item)
         value = UI.get_value(item)
         
@@ -210,6 +225,7 @@ def export_button_pressed():
     # Loop through all altitude values and add them to data dict
     for row in UI.get_item_children("Altitudes Group")[1]:
         for item in UI.get_item_children(row)[1]:
+            if UI.get_item_type(item) != UI.get_item_type("input_string"): continue
             raw_key = UI.get_item_alias(item)
             value = UI.get_value(item)
 
@@ -217,7 +233,13 @@ def export_button_pressed():
             page_index, wpt_index = indecies.split("_")
             data["page" + page_index][key + wpt_index] = value
 
-    
+    # Add the misc information to the data dict
+    # Notes
+    # Trans altitude
+    # Frequencies ARR, DEP, ALT
+    # Enroute frequencies
+
+    print("Exporting...")
     # Save file as PDF
     pages: PdfWrapper
     for page in data:
@@ -323,11 +345,12 @@ UI.destroy_context()
 
 
 #------------------TODO-----------------------
-#  Implement min remaining fuel
 #  Implement misc page info
 #  Fix UI layout
 #  Ask confirmation before reset
 #  Add status message (display errors, import + export messages)
+#  Make file name into the current date
+#  Add export file directory
 #  Add logic to not override previous exported OFP's
 #  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
 #  Detect when Full stop, Create new page from there on out
