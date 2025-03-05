@@ -11,6 +11,10 @@ vars = { # Global variables for entire script
     'previous_rem_fuel': "0",
 }
 
+default_values = {'ff_power_1': "90%", 'ff_altitude_1': "Climb", 'ff_tas_1': "80", 'ff_1': "7.8",
+                  'ff_power_3': "50%", 'ff_altitude_3': "Holding", 'ff_tas_3': "90", 'ff_3': "4.0", 
+                  '0': "   -", '1': "   -"}
+
 def extract_navlog(input_string): # takes in a string (html of page) and returns a list of all waypoints and corresponding data
     extracted = []
 
@@ -148,6 +152,11 @@ def sort_data(data_table): # takes the raw data from extract_navlog and turns it
         min_remaining_fuel += Decimal(data["page" + str(page_index)]["fuel_leg" + str(waypoint_index)])
 
         waypoint_index -= 1
+    
+    # Store totals for bottom of OFP
+    vars["dist_total"] = data_table[0][10]
+    vars["time_total"] = data_table[0][14]
+    vars["fuel_total"] = data_table[-1][12] # Last waypoint
 
     return data
 
@@ -245,15 +254,26 @@ def export_button_pressed():
         data[page]["Notes and Clearance"] = UI.get_value("Notes and Clearance")
         data[page]["transition_altitude"] = UI.get_value("transition_altitude")
 
+        # Airport frequencies
         for v in ["dep", "arr", "alt"]:
             data[page][v + "_airport"] = UI.get_value(v + "_airport")
             data[page][v + "_twr_frequency"] = UI.get_value(v + "_twr_frequency")
             data[page][v + "_atis_frequency"] = UI.get_value(v + "_atis_frequency")
             data[page][v + "_ext_frequency"] = UI.get_value(v + "_ext_frequency")
-        
+
+        # Enroute frequencies
         for i in ["1","2","3"]:
             data[page]["enr_frequency_name_" + i] = UI.get_value("station_" + i)
             data[page]["enr_frequency_" + i] = UI.get_value("frequency_" + i)
+        
+        # Default OFP values
+        for key in default_values:
+            data[page][key] = default_values[key]
+        
+        data[page]["total_fuel_on_board"] = vars['block_fuel'] + "G"
+        data[page]["dist_total"] = vars["dist_total"]
+        data[page]["time_total"] = vars["time_total"]
+        data[page]["fuel_total"] = vars["fuel_total"] + "G"
 
 
     print("Exporting...")
@@ -378,9 +398,7 @@ UI.destroy_context()
 
 
 #------------------TODO-----------------------
-#  Restore default values for text fields
-#  Fix UI layout
-#  Make file name into the current date
+#  Make file name into the current date (maybe add date selector?)
 #  Add export file directory selector
 #  Add logic to not override previous exported OFP's
 #  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
