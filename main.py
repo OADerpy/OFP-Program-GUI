@@ -166,6 +166,7 @@ def extract_button_pressed():
 
     except Exception as error:
         print("An exception occurred:", error)
+        UI.configure_item("status_display", default_value="An error occurred!\nPlease enter a valid navlog.", color=[222, 59, 22])
 
     else:
         # Lock Input Fields
@@ -174,8 +175,11 @@ def extract_button_pressed():
         UI.enable_item("export")
 
         UI.show_item("Input Window")
+        UI.configure_item("status_display", default_value="Extracted!", color=[50, 168, 82])
 
 def reset_button_pressed():
+    UI.configure_item("Reset Input Window", show=False)
+
     # Reset variables
     for i, v in enumerate(vars):
         vars[v] = None
@@ -188,6 +192,7 @@ def reset_button_pressed():
     # Enable Input Fields
     UI.enable_item("input_string")
     UI.set_value("input_string", "")
+    UI.configure_item("status_display", default_value="", color=[0,0,0])
 
     UI.enable_item("full_stop_checkbox")
     UI.disable_item("export")
@@ -206,6 +211,7 @@ def reset_button_pressed():
 
 def export_button_pressed():
     print("Calculating...")
+    UI.configure_item("status_display", default_value="Calculating...", color=[255,255,255])
     # Take the variables from the input boxes and add them to the data dict
     # Export the file as PDF
     global data
@@ -251,6 +257,7 @@ def export_button_pressed():
 
 
     print("Exporting...")
+    UI.configure_item("status_display", default_value="Exporting...", color=[255,255,255])
     # Save file as PDF
     pages: PdfWrapper
     for page in data:
@@ -261,6 +268,7 @@ def export_button_pressed():
         output.write(pages.read())
     
     print("Export Successful!")
+    UI.configure_item("status_display", default_value="Export Successful!", color=[50, 168, 82])
 
 
 UI.create_viewport(title="OFP Program", width=1080, height=600, resizable=False)
@@ -275,10 +283,12 @@ with UI.window(no_background=True, tag="Primary Window"):
 
             with UI.group(horizontal=True, tag="Extract Reset"):
                 UI.add_button(label="Extract", callback=extract_button_pressed)
-                UI.add_button(label="Reset", callback=reset_button_pressed)
+                UI.add_button(label="Reset", callback=lambda: UI.configure_item("Reset Input Window", show=True))
             
             UI.add_spacer(height=50)
             UI.add_button(label="Export as PDF", tag="export", callback=export_button_pressed)
+
+            UI.add_text(default_value="", tag="status_display", pos=(10, 508))
         
         with UI.child_window(width=740, tag="Input Window"):
             with UI.group(horizontal=True):
@@ -298,10 +308,10 @@ with UI.window(no_background=True, tag="Primary Window"):
                 with UI.group():
                     with UI.group(horizontal=True):
                         with UI.group():
-                            UI.add_text(default_value="Notes and Clearance")
+                            UI.add_text("Notes and Clearance")
                             UI.add_input_text(width=300, height=130, multiline=True, tag="Notes and Clearance")
                         with UI.group():
-                            UI.add_text(default_value="Transition Altitude")
+                            UI.add_text("Transition Altitude")
                             UI.add_input_text(width=160, height=130, uppercase=True, tag="transition_altitude", default_value="7000 FT")
 
                     UI.add_spacer(height=5)
@@ -340,7 +350,15 @@ with UI.window(no_background=True, tag="Primary Window"):
                             with UI.group(horizontal=True):
                                 UI.add_input_text(width=110, uppercase=True, hint="Station 3", tag="station_3")
                                 UI.add_input_text(width=60, hint="Frequency 3", tag="frequency_3")
-            
+
+# Reset popup window
+with UI.window(label="Reset", modal=True, show=False, tag="Reset Input Window", no_title_bar=False, pos=[400, 200]):
+    UI.add_text("This will reset everything you have entered.\n\nAre you sure?")
+    UI.add_separator()
+    with UI.group(horizontal=True):
+        UI.add_button(label="Cancel", width=75, callback=lambda: UI.configure_item("Reset Input Window", show=False))
+        UI.add_button(label="Reset", width=75, callback=reset_button_pressed)
+
 UI.hide_item("Input Window")
 
 UI.setup_dearpygui()
@@ -362,8 +380,6 @@ UI.destroy_context()
 #------------------TODO-----------------------
 #  Restore default values for text fields
 #  Fix UI layout
-#  Ask confirmation before reset
-#  Add status message (display errors, import + export messages)
 #  Make file name into the current date
 #  Add export file directory selector
 #  Add logic to not override previous exported OFP's
