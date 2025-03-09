@@ -398,6 +398,8 @@ UI.destroy_context()
 
 
 #------------------TODO-----------------------
+#  Fix it running standalone
+#  Choose wether to have seperate Notes and Clearance per page VS shared
 #  Add big label up top
 #  Make file name into the current date (maybe add date selector?)
 #  Add export file directory selector
@@ -407,6 +409,7 @@ UI.destroy_context()
 #  Automatically select FF for cruising altitude (Cruise altitude can be found bottom of Foreflight navlog)
 
 #  --optional--
+#  Export current input to a file
 #  Make min Altitude box automatically calculate minimum altitude from heighest obstacle input
 #  Create Presets for the Frequencies (Select ENCN and load all ENCN frequencies)
 #  Create a toggle for each waypoint to ignore in OFP
