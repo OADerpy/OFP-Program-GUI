@@ -340,19 +340,19 @@ with UI.window(no_background=True, tag="Primary Window"):
                         with UI.group():
                             UI.add_text(default_value="Frequencies")
                             with UI.group(horizontal=True): # Dep Airport
-                                UI.add_input_text(width=40, hint="DEP", tag="dep_airport")
+                                UI.add_input_text(width=40, hint="DEP", tag="dep_airport", uppercase=True)
                                 UI.add_input_text(width=60, hint="TWR", tag="dep_twr_frequency")
                                 UI.add_input_text(width=60, hint="ATIS", tag="dep_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="dep_ext_frequency")
                             
                             with UI.group(horizontal=True): # Arr Airport
-                                UI.add_input_text(width=40, hint="ARR", tag="arr_airport")
+                                UI.add_input_text(width=40, hint="ARR", tag="arr_airport", uppercase=True)
                                 UI.add_input_text(width=60, hint="TWR", tag="arr_twr_frequency")
                                 UI.add_input_text(width=60, hint="ATIS", tag="arr_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="arr_ext_frequency")
 
                             with UI.group(horizontal=True): # Alt Airport
-                                UI.add_input_text(width=40, hint="ALT", tag="alt_airport")
+                                UI.add_input_text(width=40, hint="ALT", tag="alt_airport", uppercase=True)
                                 UI.add_input_text(width=60, hint="TWR", tag="alt_twr_frequency")
                                 UI.add_input_text(width=60, hint="ATIS", tag="alt_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="alt_ext_frequency")
@@ -399,6 +399,7 @@ UI.destroy_context()
 
 #------------------TODO-----------------------
 #  Fix it running standalone
+#  Add power setting & cruise alt selector
 #  Choose wether to have seperate Notes and Clearance per page VS shared
 #  Add big label up top
 #  Make file name into the current date (maybe add date selector?)
@@ -409,8 +410,8 @@ UI.destroy_context()
 #  Automatically select FF for cruising altitude (Cruise altitude can be found bottom of Foreflight navlog)
 
 #  --optional--
-#  Export current input to a file
-#  Make min Altitude box automatically calculate minimum altitude from heighest obstacle input
+#  Export current input to a file to use later
+#  Make min Altitude box automatically calculate minimum altitude from highest obstacle input
 #  Create Presets for the Frequencies (Select ENCN and load all ENCN frequencies)
 #  Create a toggle for each waypoint to ignore in OFP
 #  M&B, Fuel, Performance, WX minima side
