@@ -35,16 +35,29 @@ def extract_navlog(input_string): # takes in a string (html of page) and returns
             
             extracted.append(row)
 
+    
+
+    bottom_table = page.find('table', class_="summary-times last-col-bold")
+    for element in bottom_table.descendants:
+        if element == "Profile":
+            for string in element.parent.parent.find('td', class_="pre-wrap break-word word-wrap").stripped_strings:
+                power_setting, cruise_alt = string.split(" - ")[1].split(" @ ")
+                vars["ff_power_2"] = power_setting.split(" ")[0]
+                vars["ff_altitude_2"] = cruise_alt
+                vars["ff_tas_2"] = "106"
+                break
+        
+        if element == "Fuel Flow":
+            for string in element.parent.parent.find('td', class_="pre-wrap break-word word-wrap").stripped_strings:
+                vars["ff_2"] = string.split(" ")[0]
+                break
+
     # also extract final reserve, alternate and block fuel from the header
     vars['final_res_fuel'] = page.find('td', class_="performance-metric reserve-fuel").span.string.split(" ")[0]
     vars['alt_fuel'] = page.find('td', class_="performance-metric alternate-fuel").span.string.split(" ")[0] 
     vars['block_fuel'] = page.find('td', class_="performance-metric block-fuel").span.string.split(" ")[0]
     # set previous rem fuel to block fuel
     vars['previous_rem_fuel'] = vars['block_fuel']
-
-    vars["cruise_altitude"] = page.find(string="Altitude").find_next_sibling()
-    #print(table.find_all(string='Profile'))
-    #print(table.find_all(string='Fuel Flow'))
 
     return extracted
 
@@ -270,10 +283,17 @@ def export_button_pressed():
         for key in default_values:
             data[page][key] = default_values[key]
         
+        # Totals
         data[page]["total_fuel_on_board"] = vars['block_fuel'] + "G"
         data[page]["dist_total"] = vars["dist_total"]
         data[page]["time_total"] = vars["time_total"]
         data[page]["fuel_total"] = vars["fuel_total"] + "G"
+    
+        # Fuel flow data
+        data[page]["ff_power_2"] = vars["ff_power_2"]
+        data[page]["ff_altitude_2"] = vars["ff_altitude_2"]
+        data[page]["ff_tas_2"] = "106"
+        data[page]["ff_2"] = vars["ff_2"]
 
 
     print("Exporting...")
@@ -399,7 +419,8 @@ UI.destroy_context()
 
 #------------------TODO-----------------------
 #  Fix it running standalone
-#  Add power setting & cruise alt selector
+#  Lock export button if nothing to export
+#  Do not cheat on the fuel flow TAS
 #  Choose wether to have seperate Notes and Clearance per page VS shared
 #  Add big label up top
 #  Make file name into the current date (maybe add date selector?)
@@ -407,7 +428,6 @@ UI.destroy_context()
 #  Add logic to not override previous exported OFP's
 #  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
 #  Detect when Full stop, Create new page from there on out
-#  Automatically select FF for cruising altitude (Cruise altitude can be found bottom of Foreflight navlog)
 
 #  --optional--
 #  Export current input to a file to use later
