@@ -437,6 +437,7 @@ UI.destroy_context()
 #  M&B, Fuel, Performance, WX minima side
 
 #-----------------ISSUES----------------------
+#  Crash happens when last waypoint is at the end of a page (maybe it tries to read something from the next page that doesnt exist?)
 
 
 #------------REQUIRES TESTING-----------------
