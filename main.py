@@ -1,4 +1,5 @@
 from decimal import *
+import os
 
 from bs4 import BeautifulSoup
 from PyPDFForm import PdfWrapper
@@ -301,10 +302,10 @@ def export_button_pressed():
     # Save file as PDF
     pages: PdfWrapper
     for page in data:
-        try: pages += PdfWrapper("OFP_Template.pdf").pages[0].fill(data[page])
-        except: pages = PdfWrapper("OFP_Template.pdf").pages[0].fill(data[page])
-    
-    with open("output/OFP.pdf", "wb+") as output:
+        try: pages   += PdfWrapper(os.path.join(os.getcwd(), "OFP_Template.pdf")).pages[0].fill(data[page])
+        except: pages = PdfWrapper(os.path.join(os.getcwd(), "OFP_Template.pdf")).pages[0].fill(data[page])
+
+    with open(os.path.join(os.getcwd(), 'output', "OFP.pdf"), "wb+") as output:
         output.write(pages.read())
     
     print("Export Successful!")
