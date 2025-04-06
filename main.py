@@ -419,18 +419,16 @@ UI.destroy_context()
 
 
 #------------------TODO-----------------------
-#  Fix it running standalone
 #  Lock export button if nothing to export
+#  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
+
+#  --optional--
 #  Do not cheat on the fuel flow TAS
 #  Choose wether to have seperate Notes and Clearance per page VS shared
 #  Add big label up top
 #  Make file name into the current date (maybe add date selector?)
 #  Add export file directory selector
 #  Add logic to not override previous exported OFP's
-#  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
-#  Detect when Full stop, Create new page from there on out
-
-#  --optional--
 #  Export current input to a file to use later
 #  Make min Altitude box automatically calculate minimum altitude from highest obstacle input
 #  Create Presets for the Frequencies (Select ENCN and load all ENCN frequencies)
