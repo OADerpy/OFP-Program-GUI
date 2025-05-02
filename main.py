@@ -135,9 +135,11 @@ def sort_data(data_table): # takes the raw data from extract_navlog and turns it
     page_index = 0
 
     UI.add_input_text(tag="waypoint::"+str(page_index)+"_"+str(waypoint_index + 1), default_value=first_waypoint, parent="Waypoint Group")
-    
+    page_index = -1
+
     for data_row in data_table:
         if waypoint_index == 0: # Start a new page and add the first waypoint
+            page_index += 1
             data["page" + str(page_index)] = {}
             data["page" + str(page_index)]["waypoint1"] = first_waypoint
             waypoint_index += 1
@@ -147,14 +149,18 @@ def sort_data(data_table): # takes the raw data from extract_navlog and turns it
 
         if waypoint_index == 15: #last waypoint on the page
             first_waypoint = data_row[0] # Set first waypoint for next page to current waypoint
-            page_index += 1
             waypoint_index = 0
             continue
 
         waypoint_index += 1
 
+    # Fix the page index overflow error
+    if waypoint_index == 0:
+        waypoint_index = 15
+    else:
+        waypoint_index -= 1
+
     # loop through all waypoints backwards to calculate minimum remaining fuel
-    waypoint_index -= 1
     min_remaining_fuel = Decimal(vars['final_res_fuel']) + Decimal(vars['alt_fuel'])
     for data_row in reversed(data_table):
         if waypoint_index == 0:
@@ -244,13 +250,16 @@ def export_button_pressed():
         if UI.get_item_type(item) != UI.get_item_type("input_string"): continue
         raw_key = UI.get_item_alias(item)
         value = UI.get_value(item)
-        
+
         page_index, wpt_index = raw_key.split("::")[1].split("_")
         data["page" + page_index]["waypoint" + wpt_index] = value
 
-        # Make the last waypoint the first one on the next page
-        if int(wpt_index) == 16 and data["page" + str(int(page_index)+1)] != None:
-            data["page" + str(int(page_index)+1)]["waypoint1"] = value
+        # Make the last waypoint the first one on the next page. Run a try except to catch error if it is the last of the page
+        try:
+            if int(wpt_index) == 16 and data["page" + str(int(page_index)+1)] != None:
+                data["page" + str(int(page_index)+1)]["waypoint1"] = value
+        except:
+            print("Ja heel jammer maar dit boeit me dus niks")
 
     # Loop through all altitude values and add them to data dict
     for row in UI.get_item_children("Altitudes Group")[1]:
@@ -423,21 +432,12 @@ UI.destroy_context()
 #  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
 
 #  --optional--
-#  Do not cheat on the fuel flow TAS
-#  Choose wether to have seperate Notes and Clearance per page VS shared
 #  Add big label up top
 #  Make file name into the current date (maybe add date selector?)
 #  Add export file directory selector
 #  Add logic to not override previous exported OFP's
-#  Export current input to a file to use later
-#  Make min Altitude box automatically calculate minimum altitude from highest obstacle input
 #  Create Presets for the Frequencies (Select ENCN and load all ENCN frequencies)
-#  Create a toggle for each waypoint to ignore in OFP
-#  M&B, Fuel, Performance, WX minima side
 
 #-----------------ISSUES----------------------
-#  Crash happens when last waypoint is at the end of a page (maybe it tries to read something from the next page that doesnt exist?)
-
 
 #------------REQUIRES TESTING-----------------
-# Reset button
