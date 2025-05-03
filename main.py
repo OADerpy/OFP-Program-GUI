@@ -336,7 +336,7 @@ with UI.window(no_background=True, tag="Primary Window"):
                 UI.add_button(label="Reset", callback=lambda: UI.configure_item("Reset Input Window", show=True))
             
             UI.add_spacer(height=50)
-            UI.add_button(label="Export as PDF", tag="export", callback=export_button_pressed)
+            UI.add_button(label="Export as PDF", tag="export", callback=export_button_pressed, enabled=False)
 
             UI.add_text(default_value="", tag="status_display", pos=(10, 508))
         
@@ -428,7 +428,6 @@ UI.destroy_context()
 
 
 #------------------TODO-----------------------
-#  Lock export button if nothing to export
 #  Indicate when input is disabled (maybe use UI.set_item_type_disabled_theme()? )
 
 #  --optional--
