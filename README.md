@@ -25,7 +25,7 @@ After downloading, you will need to run the file in order to start the installat
 Now that you have installed python, the last thing to do is to install the libraries required for this project.
 
 First you will need to open the command prompt (Or the terminal if you are using a MAC).
-On windows: Go to the bottom right and search for "cmd". Then click to open the command prompt.
+On windows: Go to the bottom left and search for "cmd". Then click to open the command prompt.
 ![image](https://github.com/user-attachments/assets/e51ce63e-0106-4d81-9cd5-3f95600f0418)
 
 You will need to copy-paste each one of the 3 lines below into the command prompt and then press enter
