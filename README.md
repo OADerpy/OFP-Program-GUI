@@ -41,7 +41,7 @@ You should now be able to click on "main.py" in order to start the program.
 
 
 ## How to use this program
-1. Log in on your computer on plan.foreflight.com
+1. Log in on your computer on [plan.foreflight.com](https://plan.foreflight.com/)
 1. Open the flight's navlog page
 2. right click the background of the page -> view frame source
 3. ctrl + a -> crl + c
