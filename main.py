@@ -200,7 +200,6 @@ def extract_button_pressed():
     else:
         # Lock Input Fields
         UI.disable_item("input_string")
-        UI.disable_item("full_stop_checkbox")
         UI.enable_item("export")
 
         UI.show_item("Input Window")
@@ -223,7 +222,6 @@ def reset_button_pressed():
     UI.set_value("input_string", "")
     UI.configure_item("status_display", default_value="", color=[0,0,0])
 
-    UI.enable_item("full_stop_checkbox")
     UI.disable_item("export")
 
     UI.hide_item("Input Window")
@@ -328,7 +326,6 @@ with UI.window(no_background=True, tag="Primary Window"):
             UI.add_spacer(height=10)
 
             UI.add_input_text(hint="Navlog Input", tag="input_string")
-            UI.add_checkbox(label="[WIP] Start new page after full stop", tag="full_stop_checkbox")
             UI.add_checkbox(label="Remove TOC & TOD", tag="remove_toc_tod", default_value=True)
 
             with UI.group(horizontal=True, tag="Extract Reset"):
@@ -370,21 +367,21 @@ with UI.window(no_background=True, tag="Primary Window"):
                         with UI.group():
                             UI.add_text(default_value="Frequencies")
                             with UI.group(horizontal=True): # Dep Airport
-                                UI.add_input_text(width=40, hint="DEP", tag="dep_airport", uppercase=True)
-                                UI.add_input_text(width=60, hint="TWR", tag="dep_twr_frequency")
+                                UI.add_input_text(width=40, hint="DEP", tag="dep_airport", uppercase=True, default_value="ENGK")
+                                UI.add_input_text(width=60, hint="TWR", tag="dep_twr_frequency"          , default_value="129.900")
                                 UI.add_input_text(width=60, hint="ATIS", tag="dep_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="dep_ext_frequency")
                             
                             with UI.group(horizontal=True): # Arr Airport
-                                UI.add_input_text(width=40, hint="ARR", tag="arr_airport", uppercase=True)
-                                UI.add_input_text(width=60, hint="TWR", tag="arr_twr_frequency")
+                                UI.add_input_text(width=40, hint="ARR", tag="arr_airport", uppercase=True, default_value="ENGK")
+                                UI.add_input_text(width=60, hint="TWR", tag="arr_twr_frequency"          , default_value="129.900")
                                 UI.add_input_text(width=60, hint="ATIS", tag="arr_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="arr_ext_frequency")
 
                             with UI.group(horizontal=True): # Alt Airport
-                                UI.add_input_text(width=40, hint="ALT", tag="alt_airport", uppercase=True)
-                                UI.add_input_text(width=60, hint="TWR", tag="alt_twr_frequency")
-                                UI.add_input_text(width=60, hint="ATIS", tag="alt_atis_frequency")
+                                UI.add_input_text(width=40, hint="ALT", tag="alt_airport", uppercase=True, default_value="ENCN")
+                                UI.add_input_text(width=60, hint="TWR", tag="alt_twr_frequency"          , default_value="118.100")
+                                UI.add_input_text(width=60, hint="ATIS", tag="alt_atis_frequency",         default_value="124.475")
                                 UI.add_input_text(width=60, hint="OTHER", tag="alt_ext_frequency")
 
                         UI.add_spacer(width=5)
@@ -392,14 +389,14 @@ with UI.window(no_background=True, tag="Primary Window"):
                         with UI.group():
                             UI.add_text(default_value="Enroute Frequencies")
                             with UI.group(horizontal=True):
-                                UI.add_input_text(width=110, uppercase=True, hint="Station 1", tag="station_1")
-                                UI.add_input_text(width=60, hint="Frequency 1", tag="frequency_1")
+                                UI.add_input_text(width=110, uppercase=True, hint="Station 1", tag="station_1", default_value="KJEVIK APP")
+                                UI.add_input_text(width=60, hint="Freq 1", tag="frequency_1",                   default_value="119.950")
                             with UI.group(horizontal=True):
                                 UI.add_input_text(width=110, uppercase=True, hint="Station 2", tag="station_2")
-                                UI.add_input_text(width=60, hint="Frequency 2", tag="frequency_2")
+                                UI.add_input_text(width=60, hint="Freq 2", tag="frequency_2")
                             with UI.group(horizontal=True):
-                                UI.add_input_text(width=110, uppercase=True, hint="Station 3", tag="station_3")
-                                UI.add_input_text(width=60, hint="Frequency 3", tag="frequency_3")
+                                UI.add_input_text(width=110, uppercase=True, hint="Station 3", tag="station_3", default_value="COMPANY")
+                                UI.add_input_text(width=60, hint="Freq 3", tag="frequency_3",                   default_value="123.035")
 
 # Reset popup window
 with UI.window(label="Reset", modal=True, show=False, tag="Reset Input Window", no_title_bar=False, pos=[400, 200]):
@@ -435,7 +432,6 @@ UI.destroy_context()
 #  Make file name into the current date (maybe add date selector?)
 #  Add export file directory selector
 #  Add logic to not override previous exported OFP's
-#  Create Presets for the Frequencies (Select ENCN and load all ENCN frequencies)
 
 #-----------------ISSUES----------------------
 
