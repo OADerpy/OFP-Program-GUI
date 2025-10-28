@@ -368,20 +368,20 @@ with UI.window(no_background=True, tag="Primary Window"):
                             UI.add_text(default_value="Frequencies")
                             with UI.group(horizontal=True): # Dep Airport
                                 UI.add_input_text(width=40, hint="DEP", tag="dep_airport", uppercase=True, default_value="ENGK")
-                                UI.add_input_text(width=60, hint="TWR", tag="dep_twr_frequency"          , default_value="129.900")
+                                UI.add_input_text(width=60, hint="TWR", tag="dep_twr_frequency"          , default_value="129.905")
                                 UI.add_input_text(width=60, hint="ATIS", tag="dep_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="dep_ext_frequency")
                             
                             with UI.group(horizontal=True): # Arr Airport
                                 UI.add_input_text(width=40, hint="ARR", tag="arr_airport", uppercase=True, default_value="ENGK")
-                                UI.add_input_text(width=60, hint="TWR", tag="arr_twr_frequency"          , default_value="129.900")
+                                UI.add_input_text(width=60, hint="TWR", tag="arr_twr_frequency"          , default_value="129.905")
                                 UI.add_input_text(width=60, hint="ATIS", tag="arr_atis_frequency")
                                 UI.add_input_text(width=60, hint="OTHER", tag="arr_ext_frequency")
 
                             with UI.group(horizontal=True): # Alt Airport
                                 UI.add_input_text(width=40, hint="ALT", tag="alt_airport", uppercase=True, default_value="ENCN")
-                                UI.add_input_text(width=60, hint="TWR", tag="alt_twr_frequency"          , default_value="118.100")
-                                UI.add_input_text(width=60, hint="ATIS", tag="alt_atis_frequency",         default_value="124.475")
+                                UI.add_input_text(width=60, hint="TWR", tag="alt_twr_frequency"          , default_value="118.105")
+                                UI.add_input_text(width=60, hint="ATIS", tag="alt_atis_frequency",         default_value="124.480")
                                 UI.add_input_text(width=60, hint="OTHER", tag="alt_ext_frequency")
 
                         UI.add_spacer(width=5)
@@ -390,7 +390,7 @@ with UI.window(no_background=True, tag="Primary Window"):
                             UI.add_text(default_value="Enroute Frequencies")
                             with UI.group(horizontal=True):
                                 UI.add_input_text(width=110, uppercase=True, hint="Station 1", tag="station_1", default_value="KJEVIK APP")
-                                UI.add_input_text(width=60, hint="Freq 1", tag="frequency_1",                   default_value="119.950")
+                                UI.add_input_text(width=60, hint="Freq 1", tag="frequency_1",                   default_value="119.955")
                             with UI.group(horizontal=True):
                                 UI.add_input_text(width=110, uppercase=True, hint="Station 2", tag="station_2")
                                 UI.add_input_text(width=60, hint="Freq 2", tag="frequency_2")
