@@ -12,7 +12,7 @@ Then right-click the file and select an option similar to "Extract files".
 ### 2. Download Python3
 This project is written in python, so in order to use it you will need to install it.
 
-**!! This program does not work with python versions 3.14 and newer. I reccomend using python version 3.15.5 for this program !!**
+**!! This program does not work with python versions 3.14 and newer. I reccomend using python version 3.13.5 for this program !!**
 
 Go to https://www.python.org/downloads/ and click the download button
 ![image](https://github.com/user-attachments/assets/031b6f65-386e-4210-9851-44c2b43253bf)
