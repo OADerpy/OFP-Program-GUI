@@ -42,6 +42,10 @@ You should now be able to click on "main.py" in order to start the program.
 ![image](https://github.com/user-attachments/assets/5125b5e4-d41e-4ebe-915a-35dba51e00c8)
 
 
+## If you have any trouble with installing feel free to send me a message on discord:
+oa_derpy
+
+
 ## How to use this program
 1. Log in on your computer on [plan.foreflight.com](https://plan.foreflight.com/)
 1. Open the flight's navlog page
