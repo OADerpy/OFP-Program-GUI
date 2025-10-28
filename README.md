@@ -41,11 +41,12 @@ You should now be able to click on "main.py" in order to start the program.
 
 
 ## How to use this program
-1. Log in on your computer on plan.foreflight.com
+1. Log in on your computer on [plan.foreflight.com](https://plan.foreflight.com/)
 1. Open the flight's navlog page
-2. right click the background of the page -> view frame source
-3. ctrl + a -> crl + c
-4. paste raw text into the top left box of the program labeled "Navlog Input"
+2. Right click the background of the page -> view frame source
+3. Ctrl + a -> crl + c
+4. Start the program by running 'main.py'
+5. Paste raw text into the top left box of the program labeled "Navlog Input"
 6. Press Extract, and fill in all the remaining information on the right side of the window
 7. When you are done filling in the remaining information, press "Export as PDF" to save the file.
 8. Go into the folder "output" to find your generated OFP
